@@ -33,7 +33,7 @@ namespace CyFi.Runner
             this.CurrentLevel = bot.CurrentLevel;
             this.CurrentState = hero.MovementSm.CurrentState.name;
             this.Collected = hero.Collected;
-            this.ElapsedTime = hero.End.Subtract(hero.Start).ToString("g");
+            this.ElapsedTime = bot.LastUpdated.Subtract(hero.Start).ToString("g");
             this.RadarData = string.Join(",", hero.radarData);
             this.GameTick = gameTick;
 
