@@ -54,9 +54,6 @@ public class Falling : BaseState
         var canStandOn = Collisions.CanStandOn(movementSm.GameObject, movementSm.World);
         var attemptMove = Movements.AttemptMove(movementSm);
 
-        //   if (Collisions.OnlyAirBelow(movementSm.GameObject, movementSm.World) &&
-        //   Collisions.NoHeroCollision(movementSm.GameObject, movementSm.CollidableObjects) &&
-        //   Movements.AttemptMove(movementSm))
         if (!canStandOn && attemptMove)
         {
             Movements.UpdateHeroPositions(movementSm);
