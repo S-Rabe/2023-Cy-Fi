@@ -68,11 +68,21 @@ public class Jumping : BaseState
             return;
         }
 
+        // Check if max height was reached (preserves X momentum)
+        if(maxHeightReached)
+        {
+            movementSm.ChangeState(movementSm.Falling);
+            movementSm.GameObject.deltaY = 0;
+            jumpHeight = 0;
+            return;
+        }
+
+
         // Attempt to only perform upward move in case diagonals were blocked.
         movementSm.GameObject.deltaX = 0;
         successfulMove = Movements.AttemptMove(movementSm);
 
-        if (successfulMove && !maxHeightReached)
+        if (successfulMove)
         {            
             Movements.UpdateHeroPositions(movementSm); 
             movementSm.GameObject.deltaY = 0;
