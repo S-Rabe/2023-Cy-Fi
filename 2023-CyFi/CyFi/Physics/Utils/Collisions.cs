@@ -89,6 +89,26 @@ public static class Collisions
         return onlyAirOrCoolectableBelow;
     }
 
+    public static bool CanStandOn(GameObject gameObject, WorldObject world)
+    {
+        var aboveMapBottomEdge = gameObject.YPosition > 0;
+        if (!aboveMapBottomEdge) return true;
+
+        var bottomRow = gameObject.BoundingBox()
+            .Where(pos => pos.Y == gameObject.YPosition);
+
+        ObjectType[] standTypes = new[]
+        {
+            ObjectType.Ladder,
+            ObjectType.Platform,
+            ObjectType.Solid
+        };
+
+        var canStandOn = bottomRow.Any(pos =>standTypes.Cast<int>().Contains(world.map[pos.X][pos.Y - 1]));
+        return canStandOn;
+
+    }
+
     public static bool HazardsBelow(GameObject gameObject, WorldObject world)
     {
         var aboveMapBottomEdge = gameObject.YPosition > 0;
