@@ -61,15 +61,33 @@ public class Jumping : BaseState
         // or floor
         // or ladder
         var maxHeightReached = jumpHeight >= maxHeight;
+
+        // Attempt to perform the original move (diagonals / upward).
         var successfulMove = Movements.AttemptMove(movementSm);
-        if (!successfulMove || maxHeightReached)
+
+        if (successfulMove && !maxHeightReached)
         {
-            movementSm.ChangeState(movementSm.Idle);
-            jumpHeight = 0;
+            Movements.UpdateHeroPositions(movementSm);
+            movementSm.GameObject.deltaY = 0;
+            jumpHeight++;
             return;
         }
-        
-        jumpHeight++;
-        Movements.UpdateHeroPositions(movementSm);
+
+        // Attempt to only perform upward move in case diagonals were blocked.
+        movementSm.GameObject.deltaX = 0;
+        successfulMove = Movements.AttemptMove(movementSm);
+
+        if (successfulMove && !maxHeightReached)
+        {            
+            Movements.UpdateHeroPositions(movementSm); 
+            movementSm.GameObject.deltaY = 0;
+            jumpHeight++;
+            return;
+        }
+
+        // Upward Move was blocked or max height achieved (start falling)
+        movementSm.ChangeState(movementSm.Falling);   
+        movementSm.GameObject.deltaY = 0;
+        jumpHeight = 0;  
     }
 }
