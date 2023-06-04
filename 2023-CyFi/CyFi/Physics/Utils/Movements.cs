@@ -50,7 +50,7 @@ public static class Movements
 
         Console.WriteLine($"World LEVEL: {movementSm.World.level}");
 
-        return Collisions.OnlyAirIrCollectableBelow(movementSm.GameObject, movementSm.World);
+        return !Collisions.CanStandOn(movementSm.GameObject, movementSm.World);
     }
 
     public static void UpDecision(MovementSM movementSm)
