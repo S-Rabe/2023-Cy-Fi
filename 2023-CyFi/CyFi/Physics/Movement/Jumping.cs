@@ -55,11 +55,6 @@ public class Jumping : BaseState
         base.UpdatePhysics();
         movementSm.GameObject.deltaY = 1;
 
-        // TODO: check for stopping condition - consider reuse between jumping and falling states
-        // maxHeight reached
-        // collision
-        // or floor
-        // or ladder
         var maxHeightReached = jumpHeight >= maxHeight;
 
         // Attempt to perform the original move (diagonals / upward).
