@@ -55,21 +55,44 @@ public class Jumping : BaseState
         base.UpdatePhysics();
         movementSm.GameObject.deltaY = 1;
 
-        // TODO: check for stopping condition - consider reuse between jumping and falling states
-        // maxHeight reached
-        // collision
-        // or floor
-        // or ladder
         var maxHeightReached = jumpHeight >= maxHeight;
+
+        // Attempt to perform the original move (diagonals / upward).
         var successfulMove = Movements.AttemptMove(movementSm);
-        if (!successfulMove || maxHeightReached)
+
+        if (successfulMove && !maxHeightReached)
         {
-            movementSm.ChangeState(movementSm.Idle);
+            Movements.UpdateHeroPositions(movementSm);
+            movementSm.GameObject.deltaY = 0;
+            jumpHeight++;
+            return;
+        }
+
+        // Check if max height was reached (preserves X momentum)
+        if(maxHeightReached)
+        {
+            movementSm.ChangeState(movementSm.Falling);
+            movementSm.GameObject.deltaY = 0;
             jumpHeight = 0;
             return;
         }
-        
-        jumpHeight++;
-        Movements.UpdateHeroPositions(movementSm);
+
+
+        // Attempt to only perform upward move in case diagonals were blocked.
+        movementSm.GameObject.deltaX = 0;
+        successfulMove = Movements.AttemptMove(movementSm);
+
+        if (successfulMove)
+        {            
+            Movements.UpdateHeroPositions(movementSm); 
+            movementSm.GameObject.deltaY = 0;
+            jumpHeight++;
+            return;
+        }
+
+        // Upward Move was blocked or max height achieved (start falling)
+        movementSm.ChangeState(movementSm.Falling);   
+        movementSm.GameObject.deltaY = 0;
+        jumpHeight = 0;  
     }
 }
